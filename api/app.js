@@ -1,18 +1,23 @@
 const express = require('express')
-require('dotenv').config();
-const db = require('./db/init');
+require('dotenv').config({path: './.env'});
+const cors = require('cors');
 const app = express();
+const get = require('./api/get')
+const post = require('./api/post')
 
-console.log(db);
-db.one('select * from blogpost;')
-	.then((data) => {
-		console.log(data);
-	})
-	.catch((err) => {
-		console.error(err);
-	});
+let corsOptions = {
+	origin: 'http://localhost:3000'
+};
+app.use(cors(corsOptions));
 
+app.use('/api/get', get);
+app.use('/api/post', post);
 
-app.listen(3000, () => {
-	console.log('blog server listening on port 3000')
+app.get('/api', async (req, res, next) => {
+	res.json({msg: 'at /api'})	
+	next();
+})
+
+app.listen(3001, () => {
+	console.log('blog server listening on port 3001')
 })
