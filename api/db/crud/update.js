@@ -1,8 +1,12 @@
 const db = require('../db-init')
 
-const blogTitle = async () => {
-	const query = `update blogpost set title = 'hes okay' where id = 1 returning id;`;
-	let response = await db.one(query);
+const blogTitle = async (data) => {
+	const query = `update blogpost set title = $1, modified = $2 where id = $3`;
+	let response = await db.none(query, [
+																			`${data.title}`,
+																			`${data.modified}`,
+																			`${data.id}`,
+																		]);
 	return await response;
 }
 

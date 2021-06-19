@@ -8,7 +8,7 @@ const update = require('../db/crud/update')
  */
 router.put('/title', async (req, res, next) => {
 	try {
-		let updatedEntry = await update.blogTitle();
+		let updatedEntry = await update.blogTitle(req.body);
 		res.json({updatedEntry})
 	} catch (err) {
 		console.error(err);

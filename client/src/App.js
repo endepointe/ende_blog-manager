@@ -1,3 +1,9 @@
+import './App.css';
+import {postBlog} from './crud_helpers/postBlog';
+import { 
+  updateBlogTitle,
+  updateBlogContent,
+} from './crud_helpers/updateBlog';
 import {useState, useEffect} from 'react';
 const fetcher = (url) => fetch(url).then(res => res.json());
 
@@ -10,6 +16,7 @@ function closure () {
 }
 
 function App() {
+  const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [blogs, setBlogs] = useState([]);
@@ -19,7 +26,6 @@ function App() {
       try {
         let data = await fetcher('http://localhost:3001/api/get/all');
         console.log("getting all blogs ...\n");
-        console.log(data.entries)
         setBlogs(data.entries);
       } catch (err) {
         console.error(err); 
@@ -29,6 +35,8 @@ function App() {
       }
     }
     getBlogs();
+    document.getElementById('titleChange').value = 1;
+    document.getElementById('contentChange').value = 1;
     // effect isn't dependent on blogs state
     // https://reactjs.org/link/hooks-data-fetching
   }, []); 
@@ -38,6 +46,7 @@ function App() {
     document.getElementById('content').value = null;
     setTitle(null);
     setContent(null);
+    window.location.reload();
   }
 
   const handleTitleChange = (e) => {
@@ -46,77 +55,11 @@ function App() {
   const handleContentChange = (e) => {
     setContent(e.target.value);
   }
+  const handleIdChange = (e) => {
+    console.log('id change')
+    setId(e.target.value);
+  }
 
-  const postBlog = async (e) => {
-    e.preventDefault();
-    try {
-      let res = await fetch('http://localhost:3001/api/post/create', 
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(
-            {
-              title: title,
-              date: new Date().toISOString(),
-              content: content
-            }),
-        });
-      let data = await res.json(); 
-      console.log(data);
-    } catch (err) {
-      console.error(err); 
-    } finally {
-      clearFields();
-    }
-  }
-  const updateBlogTitle = async () => {
-    try {
-      let res = await fetch('http://localhost:3001/api/put/title', 
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // body: JSON.stringify(
-          //   {
-          //     title: title,
-          //     date: new Date().toISOString(),
-          //     content: content
-          //   }),
-        });
-        let data = res.json();
-        console.log("updated data: ",data)
-    } catch (err) {
-      console.error(err);
-    } finally {
-      console.log("hes' ok");
-    }
-  }
-  const updateBlogContent = async () => {
-    try {
-      let res = await fetch('http://localhost:3001/api/put/content', 
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // body: JSON.stringify(
-          //   {
-          //     title: title,
-          //     date: new Date().toISOString(),
-          //     content: content
-          //   }),
-        });
-        let data = res.json();
-        console.log("updated data: ",data)
-    } catch (err) {
-      console.error(err);
-    } finally {
-      console.log("hes' ok");
-    }
-  }
   const deleteBlog = async () => {
     try {
       let res = await fetch('http://localhost:3001/api/delete/blog', 
@@ -142,45 +85,80 @@ function App() {
   }
 
   return (
-    <div>
-      <span>Blog count: {blogs?.length}</span>
+    <div className="container">
+      <aside className="aside">
+        <h1>Blogs</h1>
+        <span>Count: {blogs?.length}</span>
+        <ul>
+          {Object.keys(blogs).map((blog, i) => {
+            return (
+              <li key={i}>{blogs[blog].title}</li>
+            )
+          })}
+        </ul>
+      </aside>
 
-      <h1>Blog title: {title}</h1>
+      <main className="main">
+        <form>
+          <input 
+            id="title"
+            onChange={handleTitleChange}
+            type="text" placeholder="Blog title" name="title"/>
+          <textarea 
+            id="content"
+            onChange={handleContentChange}
+            name="content" placeholder="Blog content"></textarea>
+          {/* <button onClick={postBlog}>post blog</button> */}
+          <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
+        </form>
 
-      <form>
-        <input 
-          id="title"
-          onChange={handleTitleChange}
-          type="text" placeholder="Blog title" name="title"/>
-        <textarea 
-          id="content"
-          onChange={handleContentChange}
-          name="content" placeholder="Blog content"></textarea>
-        {/* <button onClick={postBlog}>post blog</button> */}
-        <button onClick={postBlog}>post blog</button>
-      </form>
+        <div>
+          <h3>Update blog title</h3>
+          <label htmlFor="blog-id">Select blog to update:</label>
+          <select
+            value='1'
+            id="titleChange"
+            onChange={handleIdChange}>
+            {Object.keys(blogs).map((blog, i) => {
+              return (
+                <option 
+                  key={i}>{blogs[blog].id}</option>
+              )})
+            }
+          </select>
+          <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
+        </div>
 
- 
-      <form>
-        <h1>Update blog</h1>
-        <input 
-          id="title"
-          onChange={handleTitleChange}
-          type="text" placeholder="Blog title" name="title"/>
-        <textarea 
-          id="content"
-          onChange={handleContentChange}
-          name="content" placeholder="Blog content"></textarea>
-        {/* <button onClick={postBlog}>post blog</button> */}
-        <button onClick={postBlog}>post blog</button>
-      </form>
+        <div>
+          <h3>Update blog content</h3>
+          <label htmlFor="blog-id">Select blog to update:</label>
+          <select
+            id="contentChange"
+            onChange={updateBlogContent}>
+            {Object.keys(blogs).map((blog, i) => {
+              return (
+                <option key={i}>{blogs[blog].id}</option>
+              )})
+            }
+          </select>
+          <button onClick={(e) => updateBlogContent(e,1,content,clearFields)}>update blog content</button>
+        </div>
 
-      <button onClick={updateBlogTitle}>update blog title</button>
-      <button onClick={updateBlogContent}>update blog content</button>
-      <button onClick={deleteBlog}>delete blogs</button>
-      {/* <button onClick={getAllBlogs}>get all blogs</button> */}
-
+        <div>
+          <h3>Delete blog</h3>
+          <label htmlFor="blog-id">Select blog to delete:</label>
+          <select>
+            {Object.keys(blogs).map((blog, i) => {
+              return (
+                  <option key={i}>{blogs[blog].id}</option>
+                )
+              })}
+          </select>
+          <button onClick={deleteBlog}>delete blogs</button>
+        </div>
+      </main>
     </div>
+    //end container
   );
 }
 
