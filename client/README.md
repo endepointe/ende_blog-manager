@@ -30,6 +30,5 @@ BlogPost: {
 	id: serial pk,
 	title: String,
 	date: Date,
-	images: [urls],
 	content: Text 
 }

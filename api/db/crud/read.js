@@ -1,4 +1,4 @@
-const db = require('../init');
+const db = require('../db-init');
 
 const allEntries = async () => {
 	console.log('reading all entries')

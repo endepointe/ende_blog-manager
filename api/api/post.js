@@ -5,10 +5,8 @@ const router = express.Router();
 router.post('/create', async (req, res, next) => {
 	console.log(req.body)
 	try {
-		let entry = await create.blogEntry(req.body)
-		console.log(entry);
+		let entry = await create.blogEntry(req.body);
 		res.json({entry});
-		// res.json({msg: 'creating post'})
 	} catch(e) {
 		console.error(e)
 	} finally {
