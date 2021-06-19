@@ -9,6 +9,8 @@ let corsOptions = {
 	origin: 'http://localhost:3000'
 };
 app.use(cors(corsOptions));
+// default "application/json"
+app.use(express.json())
 
 app.use('/api/get', get);
 app.use('/api/post', post);

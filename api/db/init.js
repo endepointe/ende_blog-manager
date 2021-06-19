@@ -1,5 +1,16 @@
 const pgp = require('pg-promise')();
 
+/**
+ * to reset the BlogPost table:
+ * 
+ * delete from blogpost where id > n;
+ * alter sequence blogpost_id_seq restart with m;
+ * 
+ * ********NOTES: 
+ * 	m must be > 0
+ * 	if m = n and n exists, there will ba a duplicate key value error
+ */
+
 const cn = {
 	host: process.env.EP_HOST,
 	port: 5432,

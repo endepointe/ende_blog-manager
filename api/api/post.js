@@ -3,11 +3,12 @@ const create = require('../db/crud/create');
 const router = express.Router();
 
 router.post('/create', async (req, res, next) => {
-	console.log(req.params)
+	console.log(req.body)
 	try {
-		let entry = await create.blogEntry()
+		let entry = await create.blogEntry(req.body)
 		console.log(entry);
 		res.json({entry});
+		// res.json({msg: 'creating post'})
 	} catch(e) {
 		console.error(e)
 	} finally {

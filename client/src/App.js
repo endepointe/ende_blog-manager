@@ -3,10 +3,20 @@ const fetcher = (url) => fetch(url).then(res => res.json());
 
 function App() {
   const [title, setTitle] = useState('');
-  const [blogData, setData] = useState({});
+  const [content, setContent] = useState('');
+
+  const clearFields = () => {
+    document.getElementById('title').value = null;
+    document.getElementById('content').value = null;
+    setTitle(null);
+    setContent(null);
+  }
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
+  }
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
   }
 
   const getAllBlogs = async () => {
@@ -21,14 +31,7 @@ function App() {
   }
   const postBlog = async (e) => {
     e.preventDefault();
-    let date = Date.now();
-    let content = document.getElementById('content').value;
-    setData({
-      title: title,
-      date:date,
-      content:content
-    })
-    console.log(blogData);
+    console.log(title, content);
     try {
       let res = await fetch('http://localhost:3001/api/post/create', 
         {
@@ -36,14 +39,19 @@ function App() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(blogData)
+          body: JSON.stringify(
+            {
+              title: title,
+              date: new Date().toISOString(),
+              content: content
+            }),
         });
       let data = await res.json(); 
       console.log(data);
     } catch (err) {
       console.error(err); 
     } finally {
-      console.log('ok')
+      clearFields();
     }
   }
   return (
@@ -51,11 +59,14 @@ function App() {
       <h1>Blog title: {title}</h1>
       <form>
         <input 
-          type="text" placeholder="Blog title" 
+          id="title"
           onChange={handleTitleChange}
-          name="title"/>
-        <textarea name="content" placeholder="Blog content"
-          id="content"></textarea>
+          type="text" placeholder="Blog title" name="title"/>
+        <textarea 
+          id="content"
+          onChange={handleContentChange}
+          name="content" placeholder="Blog content"></textarea>
+        {/* <button onClick={postBlog}>post blog</button> */}
         <button onClick={postBlog}>post blog</button>
       </form>
       <button onClick={getAllBlogs}>get all blogs</button>
