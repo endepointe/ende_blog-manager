@@ -1,11 +1,38 @@
 import {useState, useEffect} from 'react';
 const fetcher = (url) => fetch(url).then(res => res.json());
 
+function closure () {
+  var info = 'use this closure when needed';
+  function displayInfo() {
+    console.log(info);
+  }
+  displayInfo();
+}
+
 function App() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [allBlogs, setAllBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
+  useEffect(() => {
+    async function getBlogs(){
+      try {
+        let data = await fetcher('http://localhost:3001/api/get/all');
+        console.log("getting all blogs ...\n");
+        console.log(data.entries)
+        setBlogs(data.entries);
+      } catch (err) {
+        console.error(err); 
+        return null;
+      } finally {
+        closure();
+      }
+    }
+    getBlogs();
+    // effect isn't dependent on blogs state
+    // https://reactjs.org/link/hooks-data-fetching
+  }, []); 
+ 
   const clearFields = () => {
     document.getElementById('title').value = null;
     document.getElementById('content').value = null;
@@ -20,17 +47,6 @@ function App() {
     setContent(e.target.value);
   }
 
-  const getAllBlogs = async () => {
-    try {
-      let data = await fetcher('http://localhost:3001/api/get/all');
-      console.log("getting all blogs ...\n");
-      setAllBlogs(data)
-    } catch (err) {
-      console.error(err); 
-    } finally {
-      console.log(allBlogs)
-    }
-  }
   const postBlog = async (e) => {
     e.preventDefault();
     try {
@@ -127,6 +143,8 @@ function App() {
 
   return (
     <div>
+      <span>Blog count: {blogs?.length}</span>
+
       <h1>Blog title: {title}</h1>
 
       <form>
@@ -160,7 +178,7 @@ function App() {
       <button onClick={updateBlogTitle}>update blog title</button>
       <button onClick={updateBlogContent}>update blog content</button>
       <button onClick={deleteBlog}>delete blogs</button>
-      <button onClick={getAllBlogs}>get all blogs</button>
+      {/* <button onClick={getAllBlogs}>get all blogs</button> */}
 
     </div>
   );
