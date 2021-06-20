@@ -134,9 +134,9 @@ function App() {
 
         <div className="getBlog">
           <h3>Get a blog</h3>
-          <label htmlFor="blog-id">Select blog to view:</label>
+          <label htmlFor="getId">Select blog to view:</label>
           <select
-            id="contentChange"
+            id="getId"
             onChange={handleIdChange}>
             <option value="--">--</option>
             {Object.keys(blogs).map((blog, i) => {
@@ -150,11 +150,12 @@ function App() {
           <button onClick={(e) => handleGetBlog(e)}>get blog</button>
         </div>
 
-
         <div className="deleteBlog">
           <h3>Delete blog</h3>
-          <label htmlFor="blog-id">Select blog to delete:</label>
-          <select onChange={handleIdChange}>
+          <label htmlFor="blogDelete">Select blog to delete:</label>
+          <select 
+            id="blogDelete"
+            onChange={handleIdChange}>
             <option value="--">--</option>
             {Object.keys(blogs).map((blog, i) => {
               return (
