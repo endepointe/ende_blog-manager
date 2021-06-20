@@ -95,7 +95,7 @@ function App() {
           <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
         </form>
 
-        <div className="updateBlog">
+        <form className="updateBlog">
           <h3>Update blog title</h3>
           <label htmlFor="titleChange">Select blog to update:</label>
           <select
@@ -112,9 +112,9 @@ function App() {
             }
           </select>
           <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
-        </div>
+        </form>
 
-        <div className="updateBlog">
+        <form className="updateBlog">
           <h3>Update blog content</h3>
           <label htmlFor="contentChange">Select blog to update:</label>
           <select
@@ -130,9 +130,9 @@ function App() {
             }
           </select>
           <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
-        </div>
+        </form>
 
-        <div className="getBlog">
+        <form className="getBlog">
           <h3>Get a blog</h3>
           <label htmlFor="getId">Select blog to view:</label>
           <select
@@ -148,9 +148,9 @@ function App() {
             }
           </select>
           <button onClick={(e) => handleGetBlog(e)}>get blog</button>
-        </div>
+        </form>
 
-        <div className="deleteBlog">
+        <form className="deleteBlog">
           <h3>Delete blog</h3>
           <label htmlFor="blogDelete">Select blog to delete:</label>
           <select 
@@ -164,7 +164,7 @@ function App() {
               })}
           </select>
           <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
-        </div>
+        </form>
 
         <article className="blogData">
           {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
