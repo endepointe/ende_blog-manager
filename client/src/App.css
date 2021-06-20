@@ -5,9 +5,6 @@
 		flex-wrap: nowrap;
 	}
 	.aside {
-		flex: 1 1 50px;
-	}
-	.main {
-		flex: 1 1 200px;
+		width: fit-content; 
 	}
 }

@@ -1,4 +1,5 @@
 import './App.css';
+import './Nav.css';
 import {fetcher} from './utils/fetcher';
 import {getBlog} from './crud_helpers/getBlog';
 import {postBlog} from './crud_helpers/postBlog';
@@ -77,8 +78,8 @@ function App() {
     <Router>  
       <div className="container">
         <aside className="aside">
-          <nav className="">
-            <ul className="">
+          <nav className="nav">
+            <ul className="nav-links">
               <li>
                 <Link to="/post-blog">Post Blog</Link>
               </li>
@@ -131,7 +132,15 @@ function App() {
                 <button onClick={(e) => handleGetBlog(e)}>get blog</button>
               </form>
               <article className="blogData">
-                {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
+                {blog ? 
+                  <div>
+                    <h4>Blog ID: {blog.id}</h4>
+                    <h4>Blog Title: {blog.title}</h4>
+                    <h5>Posted: {new Date(blog.posted).toLocaleDateString()} {new Date(blog.posted).toLocaleTimeString()}</h5>
+                    <h5>Modified: {new Date(blog.modified).toLocaleDateString()} {new Date(blog.modified).toLocaleTimeString()}</h5>
+                    <div dangerouslySetInnerHTML={createMarkup(blog.content)}/>
+                  </div>
+                  : null}
               </article>
             </Route>
 
