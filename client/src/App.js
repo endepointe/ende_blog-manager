@@ -20,6 +20,11 @@ import {
 function createMarkup(html) {
   return {__html: html};
 }
+// returns a sliced preview of content
+function createShortenedMarkup(html) {
+  let shortenedHtml = html.slice(0,400);
+  return {__html: shortenedHtml};
+}
 
 function App() {
   const [id, setIdValue] = useState(0);
@@ -200,7 +205,7 @@ function App() {
               </form>
             </Route>
 
-            <Route path="delete-blog">
+            <Route path="/delete-blog">
               <form className="deleteBlog">
                 <h3>Delete blog</h3>
                 <label htmlFor="blogDelete">Select blog to delete:</label>
@@ -218,6 +223,21 @@ function App() {
               </form>
             </Route>
           </Switch>
+          {blogs ? 
+            <article className="allBlogs">
+              {Object.keys(blogs).map((blog, i) => {
+                return (
+                  <section>
+                    <h4>Blog ID: {blogs[blog].id}</h4>
+                    <h4>Blog Title: {blogs[blog].title}</h4>
+                    <h5>Posted: {new Date(blogs[blog].posted).toLocaleDateString()} {new Date(blogs[blog].posted).toLocaleTimeString()}</h5>
+                    <h5>Modified: {new Date(blogs[blog].modified).toLocaleDateString()} {new Date(blogs[blog].modified).toLocaleTimeString()}</h5>
+                    <div dangerouslySetInnerHTML={createShortenedMarkup(blogs[blog].content)}/>
+                  </section>
+                )
+              })}
+            </article> 
+            : <p>no blogs in database</p> }
         </main>
       </div>
       {/* end container */}
