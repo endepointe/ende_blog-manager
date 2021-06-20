@@ -104,15 +104,8 @@ function App() {
           </nav>
           <hr/>
           <div className="">
-            <h1>Blogs</h1>
-            <small>Count: {blogs?.length}</small>
-            <ul className="">
-              {Object.keys(blogs).map((blog, i) => {
-                return (
-                  <li key={i}>{blogs[blog].id} {blogs[blog].title}</li>
-                )
-              })}
-            </ul>
+            <h1>Blog Count: </h1>
+            <small>{blogs?.length}</small>
           </div>
         </aside>
 
