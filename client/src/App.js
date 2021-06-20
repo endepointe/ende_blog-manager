@@ -9,15 +9,10 @@ import {
 } from './crud_helpers/updateBlog';
 import {useState, useEffect} from 'react';
 
-// const fetcher = (url) => fetch(url).then(res => res.json());
-
-// function closure () {
-//   var info = 'use this closure when needed';
-//   function displayInfo() {
-//     console.log(info);
-//   }
-//   displayInfo();
-// }
+// the blogs will need to be in html format.
+function createMarkup(html) {
+  return {__html: html};
+}
 
 function App() {
   const [id, setIdValue] = useState(0);
@@ -100,9 +95,9 @@ function App() {
           <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
         </form>
 
-        <div>
+        <div className="updateBlog">
           <h3>Update blog title</h3>
-          <label htmlFor="blog-id">Select blog to update:</label>
+          <label htmlFor="titleChange">Select blog to update:</label>
           <select
             id="titleChange"
             value={id.value}
@@ -119,9 +114,9 @@ function App() {
           <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
         </div>
 
-        <div>
+        <div className="updateBlog">
           <h3>Update blog content</h3>
-          <label htmlFor="blog-id">Select blog to update:</label>
+          <label htmlFor="contentChange">Select blog to update:</label>
           <select
             id="contentChange"
             onChange={handleIdChange}>
@@ -137,7 +132,7 @@ function App() {
           <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
         </div>
 
-        <div>
+        <div className="getBlog">
           <h3>Get a blog</h3>
           <label htmlFor="blog-id">Select blog to view:</label>
           <select
@@ -156,7 +151,7 @@ function App() {
         </div>
 
 
-        <div>
+        <div className="deleteBlog">
           <h3>Delete blog</h3>
           <label htmlFor="blog-id">Select blog to delete:</label>
           <select onChange={handleIdChange}>
@@ -170,8 +165,7 @@ function App() {
           <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
         </div>
 
-        
-        <article>
+        <article className="blogData">
           {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
         </article>
       </main>
@@ -180,8 +174,6 @@ function App() {
   );
 }
 
-function createMarkup(html) {
-  return {__html: html};
-}
+
 
 export default App;
