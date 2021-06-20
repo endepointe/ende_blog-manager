@@ -8,6 +8,12 @@ import {
   updateBlogContent,
 } from './crud_helpers/updateBlog';
 import {useState, useEffect} from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 
 // the blogs will need to be in html format.
 function createMarkup(html) {
@@ -68,110 +74,145 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <aside className="aside">
-        <h1>Blogs</h1>
-        <span>Count: {blogs?.length}</span>
-        <ul>
-          {Object.keys(blogs).map((blog, i) => {
-            return (
-              <li key={i}>{blogs[blog].id} {blogs[blog].title}</li>
-            )
-          })}
-        </ul>
-      </aside>
-
-      <main className="main">
-        <form>
-          <h3>Post blog</h3>
-          <input 
-            id="title"
-            onChange={handleTitleChange}
-            type="text" placeholder="Blog title" name="title"/>
-          <textarea 
-            id="content"
-            onChange={handleContentChange}
-            name="content" placeholder="Blog content"></textarea>
-          <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
-        </form>
-
-        <form className="updateBlog">
-          <h3>Update blog title</h3>
-          <label htmlFor="titleChange">Select blog to update:</label>
-          <select
-            id="titleChange"
-            value={id.value}
-            onChange={handleIdChange}>
-            <option value="--">--</option>
-            {Object.keys(blogs).map((blog, i) => {
-              return (
-                <option 
-                  value={blogs[blog].id}
-                  key={i}>{blogs[blog].id}</option>
-              )})
-            }
-          </select>
-          <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
-        </form>
-
-        <form className="updateBlog">
-          <h3>Update blog content</h3>
-          <label htmlFor="contentChange">Select blog to update:</label>
-          <select
-            id="contentChange"
-            onChange={handleIdChange}>
-            <option value="--">--</option>
-            {Object.keys(blogs).map((blog, i) => {
-              return (
-                <option 
-                  value={blogs[blog].id}
-                  key={i}>{blogs[blog].id}</option>
-              )})
-            }
-          </select>
-          <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
-        </form>
-
-        <form className="getBlog">
-          <h3>Get a blog</h3>
-          <label htmlFor="getId">Select blog to view:</label>
-          <select
-            id="getId"
-            onChange={handleIdChange}>
-            <option value="--">--</option>
-            {Object.keys(blogs).map((blog, i) => {
-              return (
-                <option 
-                  value={blogs[blog].id}
-                  key={i}>{blogs[blog].id}</option>
-              )})
-            }
-          </select>
-          <button onClick={(e) => handleGetBlog(e)}>get blog</button>
-        </form>
-
-        <form className="deleteBlog">
-          <h3>Delete blog</h3>
-          <label htmlFor="blogDelete">Select blog to delete:</label>
-          <select 
-            id="blogDelete"
-            onChange={handleIdChange}>
-            <option value="--">--</option>
-            {Object.keys(blogs).map((blog, i) => {
-              return (
-                  <option key={i}>{blogs[blog].id}</option>
+    <Router>  
+      <div className="container">
+        <aside className="aside">
+          <nav className="">
+            <ul className="">
+              <li>
+                <Link to="/post-blog">Post Blog</Link>
+              </li>
+              <li>
+                <Link to="/update-title">Update Blog Title</Link>
+              </li>
+              <li>
+                <Link to="/update-content">Update Blog Content</Link>
+              </li>
+              <li>
+                <Link to="/get-blog">Get Blog</Link>
+              </li>
+              <li>
+                <Link to="/delete-blog">Delete Blog</Link>
+              </li>
+            </ul>
+          </nav>
+          <hr/>
+          <div className="">
+            <h1>Blogs</h1>
+            <small>Count: {blogs?.length}</small>
+            <ul className="">
+              {Object.keys(blogs).map((blog, i) => {
+                return (
+                  <li key={i}>{blogs[blog].id} {blogs[blog].title}</li>
                 )
               })}
-          </select>
-          <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
-        </form>
+            </ul>
+          </div>
+        </aside>
 
-        <article className="blogData">
-          {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
-        </article>
-      </main>
-    </div>
-    //end container
+        <main className="main">
+          <Switch>
+            <Route path="/get-blog">
+              <form className="getBlog">
+                <h3>Get a blog</h3>
+                <label htmlFor="getId">Select blog to view:</label>
+                <select
+                  id="getId"
+                  onChange={handleIdChange}>
+                  <option value="--">--</option>
+                  {Object.keys(blogs).map((blog, i) => {
+                    return (
+                      <option 
+                        value={blogs[blog].id}
+                        key={i}>{blogs[blog].id}</option>
+                    )})
+                  }
+                </select>
+                <button onClick={(e) => handleGetBlog(e)}>get blog</button>
+              </form>
+              <article className="blogData">
+                {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
+              </article>
+            </Route>
+
+            <Route path="/update-title">
+              <form className="updateBlog">
+                <h3>Update blog title</h3>
+                <label htmlFor="titleChange">Select blog to update:</label>
+                <select
+                  id="titleChange"
+                  value={id.value}
+                  onChange={handleIdChange}>
+                  <option value="--">--</option>
+                  {Object.keys(blogs).map((blog, i) => {
+                    return (
+                      <option 
+                        value={blogs[blog].id}
+                        key={i}>{blogs[blog].id}</option>
+                    )})
+                  }
+                </select>
+                <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
+              </form>
+            </Route>
+
+            <Route path="/update-content">
+              <form className="updateBlog">
+                <h3>Update blog content</h3>
+                <label htmlFor="contentChange">Select blog to update:</label>
+                <select
+                  id="contentChange"
+                  onChange={handleIdChange}>
+                  <option value="--">--</option>
+                  {Object.keys(blogs).map((blog, i) => {
+                    return (
+                      <option 
+                        value={blogs[blog].id}
+                        key={i}>{blogs[blog].id}</option>
+                    )})
+                  }
+                </select>
+                <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
+              </form>
+            </Route>
+
+            <Route path="/post-blog">
+              <form className="postBlog">
+                <h3>Post blog</h3>
+                <input 
+                  id="title"
+                  onChange={handleTitleChange}
+                  type="text" placeholder="Blog title" name="title"/>
+                <textarea 
+                  id="content"
+                  onChange={handleContentChange}
+                  name="content" placeholder="Blog content"></textarea>
+                <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
+              </form>
+            </Route>
+
+            <Route path="delete-blog">
+              <form className="deleteBlog">
+                <h3>Delete blog</h3>
+                <label htmlFor="blogDelete">Select blog to delete:</label>
+                <select 
+                  id="blogDelete"
+                  onChange={handleIdChange}>
+                  <option value="--">--</option>
+                  {Object.keys(blogs).map((blog, i) => {
+                    return (
+                        <option key={i}>{blogs[blog].id}</option>
+                      )
+                    })}
+                </select>
+                <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
+              </form>
+            </Route>
+          </Switch>
+        </main>
+      </div>
+      {/* end container */}
+    </Router>
   );
 }
 
