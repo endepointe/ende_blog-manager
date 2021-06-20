@@ -1,5 +1,11 @@
 import './App.css';
 import './Nav.css';
+import PostBlog from './PostBlog';
+import GetBlog from './GetBlog';
+import UpdateTitle from './UpdateTitle';
+import UpdateContent from './UpdateContent';
+import DeleteBlog from './DeleteBlog';
+import AllBlogs from './AllBlogs';
 import {fetcher} from './utils/fetcher';
 import {getBlog} from './crud_helpers/getBlog';
 import {postBlog} from './crud_helpers/postBlog';
@@ -53,14 +59,13 @@ function App() {
   }, []); 
  
   const clearFields = () => {
-    document.getElementById('title').value = null;
-    document.getElementById('content').value = null;
+    // document.getElementById('title').value = null;
+    // document.getElementById('content').value = null;
     setTitle(null);
     setContent(null);
     // setBlog(null);
     window.location.reload();
   }
-
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   }
@@ -69,10 +74,8 @@ function App() {
     setContent(e.target.value);
   }
   const handleIdChange = (e) => {
-    console.log('id change')
     setIdValue(e.target.value);
   }
-
   const handleGetBlog = async (e) => {
     let res = await getBlog(e,id, clearFields);
     console.log(res)
@@ -100,6 +103,9 @@ function App() {
               <li>
                 <Link to="/delete-blog">Delete Blog</Link>
               </li>
+              <li>
+                <Link to="/all-blogs">View All Blogs</Link>
+              </li>
             </ul>
           </nav>
           <hr/>
@@ -112,23 +118,10 @@ function App() {
         <main className="main">
           <Switch>
             <Route path="/get-blog">
-              <form className="getBlog">
-                <h3>Get a blog</h3>
-                <label htmlFor="getId">Select blog to view:</label>
-                <select
-                  id="getId"
-                  onChange={handleIdChange}>
-                  <option value="--">--</option>
-                  {Object.keys(blogs).map((blog, i) => {
-                    return (
-                      <option 
-                        value={blogs[blog].id}
-                        key={i}>{blogs[blog].id}</option>
-                    )})
-                  }
-                </select>
-                <button onClick={(e) => handleGetBlog(e)}>get blog</button>
-              </form>
+              <GetBlog 
+                blogs={blogs}
+                onChange={handleIdChange}
+                onClick={handleGetBlog}/>
               <article className="blogData">
                 {blog ? 
                   <div>
@@ -143,94 +136,45 @@ function App() {
             </Route>
 
             <Route path="/update-title">
-              <form className="updateBlog">
-                <h3>Update blog title</h3>
-                <label htmlFor="titleChange">Select blog to update:</label>
-                <select
-                  id="titleChange"
-                  value={id.value}
-                  onChange={handleIdChange}>
-                  <option value="--">--</option>
-                  {Object.keys(blogs).map((blog, i) => {
-                    return (
-                      <option 
-                        value={blogs[blog].id}
-                        key={i}>{blogs[blog].id}</option>
-                    )})
-                  }
-                </select>
-                <button onClick={(e) => updateBlogTitle(e,id,title,clearFields)}>update blog title</button>
-              </form>
+              <UpdateTitle 
+                id={id.value}
+                blogs={blogs}
+                handleTitleChange={handleTitleChange}
+                onChange={handleIdChange}
+                onClick={(e) => updateBlogTitle(e,id,title,clearFields)}/>
             </Route>
 
             <Route path="/update-content">
-              <form className="updateBlog">
-                <h3>Update blog content</h3>
-                <label htmlFor="contentChange">Select blog to update:</label>
-                <select
-                  id="contentChange"
-                  onChange={handleIdChange}>
-                  <option value="--">--</option>
-                  {Object.keys(blogs).map((blog, i) => {
-                    return (
-                      <option 
-                        value={blogs[blog].id}
-                        key={i}>{blogs[blog].id}</option>
-                    )})
-                  }
-                </select>
-                <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
-              </form>
+              <UpdateContent 
+                id={id.value}
+                blogs={blogs}
+                handleContentChange={handleContentChange}
+                onChange={handleIdChange}
+                onClick={(e) => updateBlogContent(e,id,content,clearFields)}/>
             </Route>
 
             <Route path="/post-blog">
-              <form className="postBlog">
-                <h3>Post blog</h3>
-                <input 
-                  id="title"
-                  onChange={handleTitleChange}
-                  type="text" placeholder="Blog title" name="title"/>
-                <textarea 
-                  id="content"
-                  onChange={handleContentChange}
-                  name="content" placeholder="Blog content"></textarea>
-                <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
-              </form>
+              <PostBlog 
+                onClick={(e) => postBlog(e,title,content,clearFields)}
+                handleContentChange={handleContentChange}
+                handleTitleChange={handleTitleChange} />
             </Route>
 
             <Route path="/delete-blog">
-              <form className="deleteBlog">
-                <h3>Delete blog</h3>
-                <label htmlFor="blogDelete">Select blog to delete:</label>
-                <select 
-                  id="blogDelete"
-                  onChange={handleIdChange}>
-                  <option value="--">--</option>
-                  {Object.keys(blogs).map((blog, i) => {
-                    return (
-                        <option key={i}>{blogs[blog].id}</option>
-                      )
-                    })}
-                </select>
-                <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
-              </form>
+              <DeleteBlog 
+                blogs={blogs}
+                onChange={handleIdChange}
+                onClick={(e) => deleteBlog(e,id,clearFields)}/>
+            </Route>
+
+            <Route path="/all-blogs">
+              {blogs ? 
+                <AllBlogs 
+                  blogs={blogs}
+                  createShortenedMarkup={createShortenedMarkup}/>
+                : <p>no blogs in database</p> }
             </Route>
           </Switch>
-          {blogs ? 
-            <article className="allBlogs">
-              {Object.keys(blogs).map((blog, i) => {
-                return (
-                  <section>
-                    <h4>Blog ID: {blogs[blog].id}</h4>
-                    <h4>Blog Title: {blogs[blog].title}</h4>
-                    <h5>Posted: {new Date(blogs[blog].posted).toLocaleDateString()} {new Date(blogs[blog].posted).toLocaleTimeString()}</h5>
-                    <h5>Modified: {new Date(blogs[blog].modified).toLocaleDateString()} {new Date(blogs[blog].modified).toLocaleTimeString()}</h5>
-                    <div dangerouslySetInnerHTML={createShortenedMarkup(blogs[blog].content)}/>
-                  </section>
-                )
-              })}
-            </article> 
-            : <p>no blogs in database</p> }
         </main>
       </div>
       {/* end container */}
