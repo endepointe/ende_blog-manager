@@ -1,25 +1,30 @@
 import './App.css';
+import {fetcher} from './utils/fetcher';
+import {getBlog} from './crud_helpers/getBlog';
 import {postBlog} from './crud_helpers/postBlog';
+import {deleteBlog} from './crud_helpers/deleteBlog';
 import { 
   updateBlogTitle,
   updateBlogContent,
 } from './crud_helpers/updateBlog';
 import {useState, useEffect} from 'react';
-const fetcher = (url) => fetch(url).then(res => res.json());
 
-function closure () {
-  var info = 'use this closure when needed';
-  function displayInfo() {
-    console.log(info);
-  }
-  displayInfo();
-}
+// const fetcher = (url) => fetch(url).then(res => res.json());
+
+// function closure () {
+//   var info = 'use this closure when needed';
+//   function displayInfo() {
+//     console.log(info);
+//   }
+//   displayInfo();
+// }
 
 function App() {
-  const [id, setId] = useState(0);
+  const [id, setIdValue] = useState(0);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [blogs, setBlogs] = useState([]);
+  const [blog, setBlog] = useState({});
 
   useEffect(() => {
     async function getBlogs(){
@@ -27,16 +32,15 @@ function App() {
         let data = await fetcher('http://localhost:3001/api/get/all');
         console.log("getting all blogs ...\n");
         setBlogs(data.entries);
-      } catch (err) {
+        return;
+     } catch (err) {
         console.error(err); 
         return null;
       } finally {
-        closure();
+        console.log('ok');
       }
     }
     getBlogs();
-    document.getElementById('titleChange').value = 1;
-    document.getElementById('contentChange').value = 1;
     // effect isn't dependent on blogs state
     // https://reactjs.org/link/hooks-data-fetching
   }, []); 
@@ -46,6 +50,7 @@ function App() {
     document.getElementById('content').value = null;
     setTitle(null);
     setContent(null);
+    // setBlog(null);
     window.location.reload();
   }
 
@@ -53,35 +58,18 @@ function App() {
     setTitle(e.target.value);
   }
   const handleContentChange = (e) => {
+    console.log(e.target.value);
     setContent(e.target.value);
   }
   const handleIdChange = (e) => {
     console.log('id change')
-    setId(e.target.value);
+    setIdValue(e.target.value);
   }
 
-  const deleteBlog = async () => {
-    try {
-      let res = await fetch('http://localhost:3001/api/delete/blog', 
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // body: JSON.stringify(
-          //   {
-          //     title: title,
-          //     date: new Date().toISOString(),
-          //     content: content
-          //   }),
-        });
-        let data = res.json();
-        console.log("deleted data: ",data)
-    } catch (err) {
-      console.error(err);
-    } finally {
-      console.log("hes' not ok");
-    }
+  const handleGetBlog = async (e) => {
+    let res = await getBlog(e,id, clearFields);
+    console.log(res)
+    setBlog(res.entry);
   }
 
   return (
@@ -92,7 +80,7 @@ function App() {
         <ul>
           {Object.keys(blogs).map((blog, i) => {
             return (
-              <li key={i}>{blogs[blog].title}</li>
+              <li key={i}>{blogs[blog].id} {blogs[blog].title}</li>
             )
           })}
         </ul>
@@ -100,6 +88,7 @@ function App() {
 
       <main className="main">
         <form>
+          <h3>Post blog</h3>
           <input 
             id="title"
             onChange={handleTitleChange}
@@ -108,7 +97,6 @@ function App() {
             id="content"
             onChange={handleContentChange}
             name="content" placeholder="Blog content"></textarea>
-          {/* <button onClick={postBlog}>post blog</button> */}
           <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button>
         </form>
 
@@ -116,12 +104,14 @@ function App() {
           <h3>Update blog title</h3>
           <label htmlFor="blog-id">Select blog to update:</label>
           <select
-            value='1'
             id="titleChange"
+            value={id.value}
             onChange={handleIdChange}>
+            <option value="--">--</option>
             {Object.keys(blogs).map((blog, i) => {
               return (
                 <option 
+                  value={blogs[blog].id}
                   key={i}>{blogs[blog].id}</option>
               )})
             }
@@ -134,32 +124,64 @@ function App() {
           <label htmlFor="blog-id">Select blog to update:</label>
           <select
             id="contentChange"
-            onChange={updateBlogContent}>
+            onChange={handleIdChange}>
+            <option value="--">--</option>
             {Object.keys(blogs).map((blog, i) => {
               return (
-                <option key={i}>{blogs[blog].id}</option>
+                <option 
+                  value={blogs[blog].id}
+                  key={i}>{blogs[blog].id}</option>
               )})
             }
           </select>
-          <button onClick={(e) => updateBlogContent(e,1,content,clearFields)}>update blog content</button>
+          <button onClick={(e) => updateBlogContent(e,id,content,clearFields)}>update blog content</button>
         </div>
+
+        <div>
+          <h3>Get a blog</h3>
+          <label htmlFor="blog-id">Select blog to view:</label>
+          <select
+            id="contentChange"
+            onChange={handleIdChange}>
+            <option value="--">--</option>
+            {Object.keys(blogs).map((blog, i) => {
+              return (
+                <option 
+                  value={blogs[blog].id}
+                  key={i}>{blogs[blog].id}</option>
+              )})
+            }
+          </select>
+          <button onClick={(e) => handleGetBlog(e)}>get blog</button>
+        </div>
+
 
         <div>
           <h3>Delete blog</h3>
           <label htmlFor="blog-id">Select blog to delete:</label>
-          <select>
+          <select onChange={handleIdChange}>
+            <option value="--">--</option>
             {Object.keys(blogs).map((blog, i) => {
               return (
                   <option key={i}>{blogs[blog].id}</option>
                 )
               })}
           </select>
-          <button onClick={deleteBlog}>delete blogs</button>
+          <button onClick={(e) => deleteBlog(e,id,clearFields)}>delete blog</button>
         </div>
+
+        
+        <article>
+          {blog ? <div dangerouslySetInnerHTML={createMarkup(blog.content)}/> : null}
+        </article>
       </main>
     </div>
     //end container
   );
+}
+
+function createMarkup(html) {
+  return {__html: html};
 }
 
 export default App;

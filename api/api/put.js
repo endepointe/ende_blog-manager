@@ -19,8 +19,8 @@ router.put('/title', async (req, res, next) => {
 
 router.put('/content', async (req, res, next) => {
 	try {
-		let updatedEntry = await update.blogContent();
-		res.json({msg: 'updating blog content'})
+		let updatedEntry = await update.blogContent(req.body);
+		res.json({updatedEntry})
 	} catch (err) {
 		console.error(err);
 	} finally {

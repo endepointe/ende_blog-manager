@@ -8,8 +8,9 @@ const remove = require('../db/crud/delete')
  * delete blog
  */
 router.delete('/blog', (req, res, next) => {
+	console.log(req.body);
 	try {
-		remove.blog();
+		remove.blog(req.body);
 		res.json({msg: 'blog deleted'})
 	} catch (err) {
 		console.error(err);

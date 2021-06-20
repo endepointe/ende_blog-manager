@@ -6,4 +6,16 @@ const allEntries = async () => {
 	return await response;
 }
 
-module.exports = {	allEntries: allEntries };
+const oneEntry = async (data) => {
+	console.log('reading one blog post');
+	let response = await db.one(`select * from blogpost where id = $1`, 
+	[
+		`${data.id}`
+	]);
+	return await response;
+}
+
+module.exports = {	
+	allEntries: allEntries,
+	oneEntry: oneEntry
+};

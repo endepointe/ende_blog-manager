@@ -17,6 +17,19 @@ router.get('/all', async (req, res, next) => {
 	} finally {
 		next();
 	}
-})
+});
+
+router.get('/one', async (req, res, next) => {
+	console.log(req.query);
+	try {
+		let entry = await read.oneEntry(req.query);
+		res.json({entry});
+		// res.json({msg: 'pataam'})
+	} catch(e) {
+		console.error(e);
+	} finally {
+		next();
+	}
+});
 
 module.exports = router;

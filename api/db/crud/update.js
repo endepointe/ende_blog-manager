@@ -10,10 +10,13 @@ const blogTitle = async (data) => {
 	return await response;
 }
 
-const blogContent = async () => {
-	// const query = `delete from blogpost where id > 1 returning *;`;
-	const query = `update blogpost set content = 'new content' where id = 1 returning id;`;
-	let response = await db.one(query);
+const blogContent = async (data) => {
+	const query = `update blogpost set content = $1, modified = $2 where id = $3`;
+	let response = await db.none(query, [
+																			`${data.content}`,
+																			`${data.modified}`,
+																			`${data.id}`,
+																		]);
 	return await response;
 }
 

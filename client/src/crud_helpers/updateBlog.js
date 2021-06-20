@@ -36,6 +36,7 @@ export async function updateBlogTitle(e,id, title, clearFields) {
  * @param {*} clearFields clears the updated fields
  */
 export async function updateBlogContent(e, id, content, clearFields) {
+	console.log(content)
 	e.preventDefault();
   try {
     let res = await fetch('http://localhost:3001/api/put/content', 
