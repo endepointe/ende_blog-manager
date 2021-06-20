@@ -5,9 +5,112 @@
 		flex-wrap: nowrap;
 	}
 	.aside {
-		flex: 0 0 150px;
+		flex: 0 0 200px;
 	}
 	.main {
-		flex: 1 1 200px;
+		flex: 1 1 100px;
+	}
+	form,
+	article > section {
+		max-width: 800px;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		margin-top: 1.6rem;
+		margin-bottom: 5rem;
+		margin-left: auto;
+		margin-right: auto;
+		font-size: 1.2rem;
+	}
+	section h4,
+	section h5,
+	section h6 {
+		line-height: 2rem;
+		flex: 2.5rem;
+		border-bottom: 1px solid rgba(220,220,220,0.4);
+		width:fit-content;
+	}
+	section h4 {
+		font-size: 1.6rem;
+	}
+	section h4 > span,
+	section h5 > span,
+	section h6 > span {
+		font-weight: 400;
+	}
+	section h5 {
+		font-size: 1.4rem;
+	}
+	section h6 {
+		font-size: 1.2rem;
+	}
+	.allBlogs h3,
+	article.viewBlog > h3 {
+		margin-top: 1.6rem;
+	}
+	form h3,
+	article.viewBlog > h3,
+	.allBlogs h3,
+	form label,
+	form select {
+		line-height: 2rem;
+		font-size: 1.6rem;
+		flex: 2.5rem;
+		text-align: center;
+	}
+	form input {
+		font-size: 1.6rem;
+		outline: none;
+		border: none;
+		border-bottom: 1px solid rgba(220,220,220, 0.8);
+		padding-left: 0.4rem;
+		margin-top: 3rem;
+		margin-bottom: 3rem;
+		font-weight: 400;
+	}
+	form textarea {
+		font-size: 1.2rem;
+		padding-top: 0.4rem;
+		padding-left: 0.4rem;
+		padding-right: 0.6rem;
+		border: 1px solid rgba(220,220,220, 0.8);
+		margin-bottom: 1rem;
+		font-weight: 400;
+		resize: none;
+		min-height: 300px;
+		max-height: 700px;
+		box-shadow: none;
+		outline: none;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+	}
+	form textarea:focus {
+		outline: none;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+	}
+
+	form select,
+	form button,
+	.alert button {
+		flex: 1 1 2.8rem;
+		width: 80%;
+		align-self: center;
+	}
+	form button,
+	.alert button {
+		background-color: rgba(255,255,255,0);
+		border: 1px solid rgb(50,180,55);
+		color: rgb(50,180,55);
+		font-size: 1.4rem;
+		margin-top: 1.5rem;
+	}
+	form button:hover,
+	.alert button:hover {
+		cursor: pointer;
+		border: 2px solid rgb(45,170,50);
+		color: rgb(45,170,50);
 	}
 }

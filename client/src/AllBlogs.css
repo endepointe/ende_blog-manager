@@ -1,0 +1,16 @@
+@media screen and (min-width: 0px) {
+	.viewBlogLink {
+		flex: 1 1 2.2rem;
+		width: max-content;
+		background-color: rgba(15, 82, 145,1) ;
+		color: white;
+		border-radius: 0.3rem;
+		padding: 0 2rem;
+		margin-top: 0.8rem;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+	}
+}

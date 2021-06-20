@@ -1,3 +1,4 @@
+import './Update.css';
 export default function UpdateTitle(props) {
 	return (
 		<form className="updateBlog">
@@ -17,12 +18,14 @@ export default function UpdateTitle(props) {
             )})
           }
       </select>
-			<label htmlFor="changedTitle">Change Title:</label>
+			<label htmlFor="changedTitle"></label>
 			<input 
 				id="changedTitle"
 				onChange={props.handleTitleChange}
-				type="text" placeholder="Blog title" name="title"/>
-      <button onClick={props.onClick}>update blog title</button>
+				type="text" placeholder="New Blog title" name="title"/>
+      <button 
+        className="update"
+        onClick={props.onClick}>update title</button>
     </form>
 	)
 }

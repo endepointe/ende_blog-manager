@@ -1,11 +1,12 @@
 import './App.css';
-import './Nav.css';
+import Nav from './Nav';
 import PostBlog from './PostBlog';
 import GetBlog from './GetBlog';
 import UpdateTitle from './UpdateTitle';
 import UpdateContent from './UpdateContent';
 import DeleteBlog from './DeleteBlog';
 import AllBlogs from './AllBlogs';
+import ViewBlog from './ViewBlog';
 import {fetcher} from './utils/fetcher';
 import {getBlog} from './crud_helpers/getBlog';
 import {postBlog} from './crud_helpers/postBlog';
@@ -19,7 +20,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from 'react-router-dom';
 
 // the blogs will need to be in html format.
@@ -38,6 +38,7 @@ function App() {
   const [content, setContent] = useState('');
   const [blogs, setBlogs] = useState([]);
   const [blog, setBlog] = useState({});
+  const [deleteButton, showDeleteButton] = useState(false);
 
   useEffect(() => {
     async function getBlogs(){
@@ -59,11 +60,10 @@ function App() {
   }, []); 
  
   const clearFields = () => {
-    // document.getElementById('title').value = null;
-    // document.getElementById('content').value = null;
     setTitle(null);
     setContent(null);
-    // setBlog(null);
+    setBlog(null);
+    showDeleteButton(false);
     window.location.reload();
   }
   const handleTitleChange = (e) => {
@@ -86,28 +86,7 @@ function App() {
     <Router>  
       <div className="container">
         <aside className="aside">
-          <nav className="nav">
-            <ul className="nav-links">
-              <li>
-                <Link to="/post-blog">Post Blog</Link>
-              </li>
-              <li>
-                <Link to="/update-title">Update Blog Title</Link>
-              </li>
-              <li>
-                <Link to="/update-content">Update Blog Content</Link>
-              </li>
-              <li>
-                <Link to="/get-blog">Get Blog</Link>
-              </li>
-              <li>
-                <Link to="/delete-blog">Delete Blog</Link>
-              </li>
-              <li>
-                <Link to="/all-blogs">View All Blogs</Link>
-              </li>
-            </ul>
-          </nav>
+          <Nav/>
           <hr/>
           <div className="">
             <h1>Blog Count: </h1>
@@ -117,6 +96,13 @@ function App() {
 
         <main className="main">
           <Switch>
+            <Route exact path="/">
+              <PostBlog 
+                onClick={(e) => postBlog(e,title,content,clearFields)}
+                handleContentChange={handleContentChange}
+                handleTitleChange={handleTitleChange} />
+            </Route>
+
             <Route path="/get-blog">
               <GetBlog 
                 blogs={blogs}
@@ -124,13 +110,13 @@ function App() {
                 onClick={handleGetBlog}/>
               <article className="blogData">
                 {blog ? 
-                  <div>
+                  <section>
                     <h4>Blog ID: {blog.id}</h4>
-                    <h4>Blog Title: {blog.title}</h4>
+                    <h5>Blog Title: {blog.title}</h5>
                     <h5>Posted: {new Date(blog.posted).toLocaleDateString()} {new Date(blog.posted).toLocaleTimeString()}</h5>
-                    <h5>Modified: {new Date(blog.modified).toLocaleDateString()} {new Date(blog.modified).toLocaleTimeString()}</h5>
+                    <h6>Modified: {new Date(blog.modified).toLocaleDateString()} {new Date(blog.modified).toLocaleTimeString()}</h6>
                     <div dangerouslySetInnerHTML={createMarkup(blog.content)}/>
-                  </div>
+                  </section>
                   : null}
               </article>
             </Route>
@@ -153,16 +139,11 @@ function App() {
                 onClick={(e) => updateBlogContent(e,id,content,clearFields)}/>
             </Route>
 
-            <Route path="/post-blog">
-              <PostBlog 
-                onClick={(e) => postBlog(e,title,content,clearFields)}
-                handleContentChange={handleContentChange}
-                handleTitleChange={handleTitleChange} />
-            </Route>
-
             <Route path="/delete-blog">
               <DeleteBlog 
                 blogs={blogs}
+                show={deleteButton}
+                stateChange={showDeleteButton}
                 onChange={handleIdChange}
                 onClick={(e) => deleteBlog(e,id,clearFields)}/>
             </Route>
@@ -174,6 +155,11 @@ function App() {
                   createShortenedMarkup={createShortenedMarkup}/>
                 : <p>no blogs in database</p> }
             </Route>
+
+            <Route path="/view-blog">
+              <ViewBlog
+                createMarkup={createMarkup}/>
+            </Route>
           </Switch>
         </main>
       </div>
@@ -181,7 +167,5 @@ function App() {
     </Router>
   );
 }
-
-
 
 export default App;

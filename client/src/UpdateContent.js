@@ -1,8 +1,8 @@
+import './Update.css';
 export default function UpdateTitle(props) {
 	return (
 		<form className="updateBlog">
       <h3>Update blog title</h3>
-
       <label htmlFor="contentChange">Select blog to update:</label>
       <select
         id="contentChange"
@@ -17,12 +17,14 @@ export default function UpdateTitle(props) {
             )})
           }
       </select>
-			<label htmlFor="changedContent">Change Content:</label>
+			<label htmlFor="changedContent"></label>
 			<input 
 				id="changedContent"
 				onChange={props.handleContentChange}
-				type="text" placeholder="Change Blog Content" name="content"/>
-      <button onClick={props.onClick}>update blog content</button>
+				type="text" placeholder="New Blog content" name="content"/>
+      <button 
+        className="update"
+        onClick={props.onClick}>update content</button>
     </form>
 	)
 }

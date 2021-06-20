@@ -1,6 +1,8 @@
 * {
   margin: 0;
   padding: 0;
+  /* https://fonts.google.com/share?selection.family=Karla:wght@300;400;700;800 */
+  font-family: 'Karla', sans-serif; 
 }
 a {
   color: inherit;

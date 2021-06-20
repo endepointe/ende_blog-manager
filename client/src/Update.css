@@ -1,0 +1,10 @@
+@media screen and (min-width: 0px) {
+	button.update {
+		border: 1px solid rgb(240, 220, 30);
+		color: rgb(240, 220, 30);
+	}
+	button.update:hover {
+		border: 2px solid rgb(235, 215, 25);
+		color: rgb(235, 215, 25);
+	}
+}

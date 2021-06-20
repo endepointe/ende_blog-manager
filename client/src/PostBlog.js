@@ -1,6 +1,11 @@
-import "./PostBlog.css";
+// import "./PostBlog.css";
 
 export default function PostBlog(props) {
+	const setHeight = (e) => {
+		e.target.style.height = '';
+		e.target.style.height = `${e.target.scrollHeight}px`;
+		console.log(e.target.scrollHeight);
+	}
 	return (
 		<form className="postBlog">
 			<h3>Post blog</h3>
@@ -11,8 +16,8 @@ export default function PostBlog(props) {
 			<textarea 
 				id="content"
 				onChange={props.handleContentChange}
+				onInput={setHeight}
 				name="content" placeholder="Blog content"></textarea>
-			{/* <button onClick={(e) => postBlog(e, title, content, clearFields)}>post blog</button> */}
 			<button onClick={props.onClick}>post blog</button>
 		</form>
 	)
