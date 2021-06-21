@@ -1,5 +1,10 @@
 import './Update.css';
 export default function UpdateTitle(props) {
+	const setHeight = (e) => {
+		e.target.style.height = '';
+		e.target.style.height = `${e.target.scrollHeight}px`;
+		console.log(e.target.scrollHeight);
+	}
 	return (
 		<form className="updateBlog">
       <h3>Update blog title</h3>
@@ -18,10 +23,15 @@ export default function UpdateTitle(props) {
           }
       </select>
 			<label htmlFor="changedContent"></label>
-			<input 
+			{/* <input 
 				id="changedContent"
 				onChange={props.handleContentChange}
-				type="text" placeholder="New Blog content" name="content"/>
+				type="text" placeholder="New Blog content" name="content"/> */}
+			<textarea 
+				id="changedContent"
+				onChange={props.handleContentChange}
+				onInput={setHeight}
+				name="content" placeholder="New Blog content"></textarea>
       <button 
         className="update"
         onClick={props.onClick}>update content</button>

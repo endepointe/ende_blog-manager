@@ -1,3 +1,4 @@
+import "./ViewBlog.css";
 import {
   useLocation,
 } from 'react-router-dom';
@@ -5,7 +6,6 @@ import {
 export default function ViewBlog(props) {
   const location = useLocation();
   const {data} = location.state;
-  console.log(data);
 	return (
     <article className="viewBlog">
       <h3>View Blog</h3>
@@ -14,7 +14,9 @@ export default function ViewBlog(props) {
         <h5>Blog Title: <span>{data.title}</span></h5>
         <h6>Posted: <span>{new Date(data.posted).toLocaleDateString()} {new Date(data.posted).toLocaleTimeString()}</span></h6>
         <h6>Modified: <span>{new Date(data.modified).toLocaleDateString()} {new Date(data.modified).toLocaleTimeString()}</span></h6>
-        <div dangerouslySetInnerHTML={props.createMarkup(data.content)}/>
+        <div 
+          className="returnedMarkdown"
+          dangerouslySetInnerHTML={props.createMarkup(data.content)}/>
       </section>
     </article>
 	)

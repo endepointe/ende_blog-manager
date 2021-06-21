@@ -21,10 +21,18 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-
-// the blogs will need to be in html format.
+// const marked = require('marked')
+import marked from 'marked';
+marked.setOptions({
+  breaks: true,
+})
+// the blogs will need to be in html format when returned
+// https://github.com/markedjs/marked/issues/190#issuecomment-8653033170
 function createMarkup(html) {
-  return {__html: html};
+  let markdown = `${html}`;
+  markdown = markdown.replace(/\n(?=\n)/g, "<br/><br/>\n\n");
+  let md = marked(markdown);
+  return {__html: md};
 }
 // returns a sliced preview of content
 function createShortenedMarkup(html) {
