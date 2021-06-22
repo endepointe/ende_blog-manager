@@ -26,13 +26,14 @@ tables with userposts.
 - update posts
 - delete posts (should rarely be done)
 
-```
-blogpost: {
-	id: serial pk,
-	title: string,
-	date: date,
-	content: text 
-}
+```javascript
+	blogpost: {
+		id: serial pk,
+		title: string,
+		date: date,
+		content: text
+	}
+	const test = 'testing';
 ```
 
 [google](http://google.com)

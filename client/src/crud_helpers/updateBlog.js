@@ -6,6 +6,7 @@
  */
 export async function updateBlogTitle(e,id, title, clearFields) {
 	e.preventDefault();
+	console.log(e)
 	try {
 		let res = await fetch('http://localhost:3001/api/put/title', 
 			{

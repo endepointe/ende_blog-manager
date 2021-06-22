@@ -1,3 +1,4 @@
+import "./GetBlog.css";
 export default function GetBlog(props) {
 	return (
   	<form className="getBlog">
@@ -6,15 +7,17 @@ export default function GetBlog(props) {
       <select
         id="getId"
         onChange={props.onChange}>
-      <option value="--">--</option>
+      <option 
+        value="--">--</option>
         {Object.keys(props.blogs).map((blog, i) => {
           return (
             <option 
-              value={props.blogs[blog].id}
+             value={props.blogs[blog].id}
               key={i}>{props.blogs[blog].id}</option>
           )})
         }
         </select>
+      {props.err ? <span className="errSelectBlog">Select a blog</span> : null}
       <button onClick={props.onClick}>get blog</button>
     </form>
 	)

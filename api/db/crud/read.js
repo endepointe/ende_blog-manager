@@ -8,6 +8,9 @@ const allEntries = async () => {
 
 const oneEntry = async (data) => {
 	console.log('reading one blog post');
+	if (data.id == '--') {
+		return 'select a value';
+	}
 	let response = await db.one(`select * from blogpost where id = $1`, 
 	[
 		`${data.id}`

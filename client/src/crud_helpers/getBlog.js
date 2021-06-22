@@ -1,5 +1,9 @@
 import {fetcher} from '../utils/fetcher';
 
+function SelectBlogException(msg) {
+	console.warn(msg);
+	return undefined;
+}
 /**
  * 
  * @param {event} e event
@@ -9,16 +13,10 @@ import {fetcher} from '../utils/fetcher';
 export async function getBlog(e, id) {
 	e.preventDefault();
 	try {
-		// let res = await fetch('http://localhost:3001/api/get/one', {
-		// 	method: "POST",
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify({
-		// 		id: id
-		// 	})
-		// });
 		let url = new URL('http://localhost:3001/api/get/one');
+		if (id === '--') {
+			throw new SelectBlogException('select a blog')
+		}
 		let	params = {
 					id: id
 				}

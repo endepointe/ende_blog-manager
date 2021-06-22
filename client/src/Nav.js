@@ -11,12 +11,6 @@ export default function Nav() {
           <Link to="/">Post Blog</Link>
         </li>
         <li>
-          <Link to="/update-title">Update Blog Title</Link>
-        </li>
-        <li>
-          <Link to="/update-content">Update Blog Content</Link>
-        </li>
-        <li>
           <Link to="/get-blog">Get Blog</Link>
         </li>
         <li>

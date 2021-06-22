@@ -24,7 +24,6 @@ router.get('/one', async (req, res, next) => {
 	try {
 		let entry = await read.oneEntry(req.query);
 		res.json({entry});
-		// res.json({msg: 'pataam'})
 	} catch(e) {
 		console.error(e);
 	} finally {

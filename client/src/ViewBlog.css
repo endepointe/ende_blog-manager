@@ -12,6 +12,12 @@
 	margin-left: 4rem;
 	padding-left: 0.5rem;	
 }
+.returnedMarkdown pre {
+	background-color: rgba(240,240,240,0.8);
+	padding: 1rem 2rem;
+	border-radius: 5px;
+}
+
 .returnedMarkdown a {
 	text-decoration: underline;
 }
@@ -21,12 +27,17 @@
 	text-decoration: underline;
 }
 
-
-.returnedMarkdown a {
-	text-decoration: underline;
+.updateBlogLinks {
+	margin: 2rem 0;
 }
-
-
-.returnedMarkdown a {
-	text-decoration: underline;
+.updateBlogLinks a {
+	color: rgb(66,135,245);
+	padding: 0.5rem 1rem;
+	margin: 0 0.5rem;
+}
+.updateTitleLink,
+.updateContentLink {
+	background-color: rgba(255, 255, 255, 0);
+	border: 2px solid rgb(66,135,245);
+	border-radius: 5px;
 }

@@ -15,6 +15,7 @@ import {
   updateBlogTitle,
   updateBlogContent,
 } from './crud_helpers/updateBlog';
+import checkDates from './utils/check-dates';
 import {useState, useEffect} from 'react';
 import {
   BrowserRouter as Router,
@@ -28,9 +29,11 @@ marked.setOptions({
 })
 // the blogs will need to be in html format when returned
 // https://github.com/markedjs/marked/issues/190#issuecomment-8653033170
+// codeblocks still an issue 
+// https://github.com/markedjs/marked/issues/983 
 function createMarkup(html) {
   let markdown = `${html}`;
-  markdown = markdown.replace(/\n(?=\n)/g, "<br/><br/>\n\n");
+  markdown = markdown.replace(/\n(?=\n)/g, "\n\n<br/>\n");
   let md = marked(markdown);
   return {__html: md};
 }
@@ -46,6 +49,7 @@ function App() {
   const [content, setContent] = useState('');
   const [blogs, setBlogs] = useState([]);
   const [blog, setBlog] = useState({});
+  const [err, setErr] = useState(false);
   const [deleteButton, showDeleteButton] = useState(false);
 
   useEffect(() => {
@@ -75,6 +79,7 @@ function App() {
     window.location.reload();
   }
   const handleTitleChange = (e) => {
+    console.log(e.target.value);
     setTitle(e.target.value);
   }
   const handleContentChange = (e) => {
@@ -85,8 +90,11 @@ function App() {
     setIdValue(e.target.value);
   }
   const handleGetBlog = async (e) => {
+    console.log(e)
     let res = await getBlog(e,id, clearFields);
-    console.log(res)
+    console.log(!res)
+    if (!res) { setErr(!res);return;}
+    setErr(!res);
     setBlog(res.entry);
   }
 
@@ -114,6 +122,7 @@ function App() {
             <Route path="/get-blog">
               <GetBlog 
                 blogs={blogs}
+                err={err}
                 onChange={handleIdChange}
                 onClick={handleGetBlog}/>
               <article className="blogData">
@@ -121,9 +130,30 @@ function App() {
                   <section>
                     <h4>Blog ID: {blog.id}</h4>
                     <h5>Blog Title: {blog.title}</h5>
-                    <h5>Posted: {new Date(blog.posted).toLocaleDateString()} {new Date(blog.posted).toLocaleTimeString()}</h5>
-                    <h6>Modified: {new Date(blog.modified).toLocaleDateString()} {new Date(blog.modified).toLocaleTimeString()}</h6>
-                    <div dangerouslySetInnerHTML={createMarkup(blog.content)}/>
+                    <h5>Posted:{' '}
+                      {checkDates(
+                        new Date(blog.posted).toLocaleDateString(),
+                        new Date(blog.modified).toLocaleDateString()
+                      ) > 0 ?
+                      <span>
+                        {new Date(blog.posted).toLocaleDateString()} {new Date(blog.posted).toLocaleTimeString()}
+                      </span>
+                      : null }
+                      </h5>
+                    <h6>Modified:{' '}
+                      {checkDates(
+                        new Date(blog.posted).toLocaleDateString(),
+                        new Date(blog.modified).toLocaleDateString()
+                      ) > 0 ?
+                      <span>
+                        {new Date(blog.modified).toLocaleDateString()} {new Date(blog.modified).toLocaleTimeString()}
+                      </span>
+                      : null }
+                      </h6>
+                      { blog.content ? 
+                      <div 
+                        dangerouslySetInnerHTML={createMarkup(blog.content)}/>  
+                      : null }
                   </section>
                   : null}
               </article>
@@ -131,19 +161,15 @@ function App() {
 
             <Route path="/update-title">
               <UpdateTitle 
-                id={id.value}
-                blogs={blogs}
                 handleTitleChange={handleTitleChange}
-                onChange={handleIdChange}
+                onChange={setIdValue}
                 onClick={(e) => updateBlogTitle(e,id,title,clearFields)}/>
             </Route>
 
             <Route path="/update-content">
               <UpdateContent 
-                id={id.value}
-                blogs={blogs}
                 handleContentChange={handleContentChange}
-                onChange={handleIdChange}
+                onChange={setIdValue}
                 onClick={(e) => updateBlogContent(e,id,content,clearFields)}/>
             </Route>
 
