@@ -4,8 +4,8 @@ create table <your_blog_table> (
 	id serial primary key,
 	title text,
 	content text,
-	posted timezonetz,
-	modified timezonetz
+	posted timestamptz,
+	modified timestamptz
 );
 ```
 But you are free to choose whatever you want to store.
