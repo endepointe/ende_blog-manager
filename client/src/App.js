@@ -22,7 +22,6 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-// const marked = require('marked')
 import marked from 'marked';
 marked.setOptions({
   breaks: true,

@@ -1,42 +1,25 @@
-# Creating and Posting my Blog
-I want to be able to manage blogs from a local host application. the database 
-will be separated, running on its own secure server.
+Setting up your database table can be as simple as:
+```
+create table <your_blog_table> (
+	id serial primary key,
+	title text,
+	content text,
+	posted timezonetz,
+	modified timezonetz
+);
+```
+But you are free to choose whatever you want to store.
 
-This will give me the ability to backup and manage the existing blog posts 
-that have been staticly inserted into my site at every /blog/title
-
-This will require that my server and database are secure. 
-every blog post backup will auto increment for reference to join
-tables with userposts.
-
-### what i will need to do:
-1. create a blog management application.
-2. set up a database for my blog post
-3. retrieve those blogs an populate them within the blog component.
-
-### the mvp for the blog management application will contain service for:
-- creating a title
--	creating blog content
-- creating a unique id based on the date and title
-- submitting the blog to the database
-- save a local copy of each blog
-
-### what it should have in the future:
-- retrieve all posts based on given parameters
-- update posts
-- delete posts (should rarely be done)
-
-```javascript
-	blogpost: {
-		id: serial pk,
-		title: string,
-		date: date,
-		content: text
-	}
-	const test = 'testing';
+To run the applications:
+```
+git clone https://github.com/endepointe/ende_blog-manager.git
+cd ende_blog-manager/client
+npm install
+cd ../api && npm install
+npm run blog
 ```
 
-[google](http://google.com)
+[Overview on YouTube](https://youtu.be/zhNe0CEmam4)
 
-test
-things
+If you have any questions, make a pull request or leave a comment in
+the video.
