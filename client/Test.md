@@ -1,8 +1,24 @@
-If you want to embed images, this is how you do it:
+It's very easy to make some words **bold** and other words *italic* with Markdown [link to Google!](http://google.com).
 
+first img link 
+
+[![blog manager](https://img.youtube.com/vi/zhNe0CEmam4/0.jpg)](https://youtu.be/zhNe0CEmam4)
+
+second image link
+
+[![object property](https://img.youtube.com/vi/0htvbjBMtPk/0.jpg)](https://youtu.be/0htvbjBMtPk)
+
+<script src="./test.js">console.log('if run, would return not found')</script>
+
+If you want to embed images, this is how you do it:
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
-It's very easy to make some words **bold** and other words *italic* with Markdown. You can even [link to Google!](http://google.com)
+links updated
+
+<a href="google.com">
+  <img src="https://img.youtube.com/vi/0htvbjBMtPk/0.jpg">
+</a>
+
 
 Sometimes you want numbered lists:
 
